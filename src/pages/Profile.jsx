@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = ({ user }) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -68,9 +68,9 @@ const Profile = ({ user }) => {
                   Phone number: {userInfo.phone}
                 </li>
                 <li className="list-group-item bg-secondary">
-                  <a href="/orders">
+                  <Link to="/orders">
                     <button className="btn btn-success">View all orders</button>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
