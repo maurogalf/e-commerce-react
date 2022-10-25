@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Productos from "./pages/Productos";
 import Detail from "./pages/Detail";
@@ -13,22 +13,28 @@ import Register from "./pages/Register";
 
 function App() {
   const [user, setUser] = useState(null);
-  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const getUser = async (token) => {
-    const { data } = await axios({
-      method: "POST",
-      url: "https://e-commerce-node-mga.herokuapp.com/api/validatetoken",
-      headers: {},
-      data: {
-        token: token,
-      },
-    });
-    setUser(data.user);
+    try {
+      const { data } = await axios({
+        method: "POST",
+        url: "https://e-commerce-node-mga.herokuapp.com/api/validatetoken",
+        headers: {},
+        data: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      setUser(data.user);
+    } catch (error) {
+      setUser(null);
+      localStorage.clear("token");
+      navigate("/login");
+    }
   };
 
-  if (token) {
-    getUser(token);
+  if (localStorage.getItem("token")) {
+    getUser(localStorage.getItem("token"));
   }
   const DefaultContainer = () => (
     <div>

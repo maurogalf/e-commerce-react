@@ -19,7 +19,7 @@ const Orders = ({ user }) => {
       if (id === "last") {
         setOrders(data.slice(data.length - 1, data.length));
       } else if (id === undefined) {
-        setOrders(data);
+        setOrders(data.reverse());
       } else {
         setOrders(data.filter((order) => order._id === id));
       }

@@ -39,14 +39,13 @@ const Cart = ({ user }) => {
 
   const handleCheckOut = async () => {
     try {
-      const { data } = await axios({
+      await axios({
         method: "POST",
         url: `https://e-commerce-node-mga.herokuapp.com/api/orders/${user}`,
         headers: {
           authorization: `bearer ${token}`,
         },
       });
-      console.log(data);
       navigate(`/orders/last`);
     } catch (error) {
       console.log(error.message);
