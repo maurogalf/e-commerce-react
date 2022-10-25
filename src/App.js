@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Productos from "./pages/Productos";
 import Detail from "./pages/Detail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Profile from "./pages/Profile";
 import axios from "axios";
 import Navbar from "./components/Navbar";
@@ -33,9 +33,11 @@ function App() {
     }
   };
 
-  if (localStorage.getItem("token")) {
-    getUser(localStorage.getItem("token"));
-  }
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      getUser(localStorage.getItem("token"));
+    }
+  }, [user]);
   const DefaultContainer = () => (
     <div>
       <Navbar user={user} />

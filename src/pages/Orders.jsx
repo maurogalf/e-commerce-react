@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Orders = ({ user }) => {
   const { id } = useParams();
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const getOrders = async () => {
     try {
@@ -25,6 +26,10 @@ const Orders = ({ user }) => {
       }
     } catch (error) {
       console.log(error.message);
+      if (error.response.status === 401) {
+        localStorage.clear("token");
+        navigate("/login");
+      }
     }
   };
 

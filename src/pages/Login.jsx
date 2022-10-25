@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Login = ({ setUser }) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(false);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+
+  localStorage.getItem("token") && navigate("/productos");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,18 +26,13 @@ const Login = ({ setUser }) => {
       });
       setUser(credentials.username);
       setError(false);
-      setToken(response.data.token);
       localStorage.setItem("token", response.data.token);
+      navigate("/productos");
     } catch (error) {
       setError(true);
       console.log(error);
     }
   };
-
-  useEffect(() => {}, [token]);
-  if (token) {
-    return <Navigate to="/productos" replace={true} />;
-  }
 
   return (
     <div className="bg-dark container">

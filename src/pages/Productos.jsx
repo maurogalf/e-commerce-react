@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 
 const Productos = ({ user }) => {
   const { category } = useParams();
   const [products, setProducts] = useState([]);
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -27,6 +29,10 @@ const Productos = ({ user }) => {
       setProducts(response.data);
     } catch (error) {
       console.log(error.message);
+      if (error.response.status === 401) {
+        localStorage.clear("token");
+        navigate("/login");
+      }
     }
   };
 

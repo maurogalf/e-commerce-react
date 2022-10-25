@@ -3,20 +3,28 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Cart = ({ user }) => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   const getCartUser = async (user) => {
-    const { data } = await axios({
-      method: "GET",
-      url: `https://e-commerce-node-mga.herokuapp.com/api/carts/${user}`,
-      headers: {
-        authorization: `bearer ${token}`,
-      },
-      data: {},
-    });
-    setProducts(data.items);
+    try {
+      const { data } = await axios({
+        method: "GET",
+        url: `https://e-commerce-node-mga.herokuapp.com/api/carts/${user}`,
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+        data: {},
+      });
+      setProducts(data.items);
+    } catch (error) {
+      console.log(error.message);
+      if (error.response.status === 401) {
+        localStorage.clear("token");
+        navigate("/login");
+      }
+    }
   };
 
   const handleDelete = (code) => {
@@ -55,6 +63,10 @@ const Cart = ({ user }) => {
   useEffect(() => {
     user && getCartUser(user);
   }, [user]);
+
+  if (!products) {
+    return <h2 className="m-5 text-white">Cargando...</h2>;
+  }
 
   if (products.length === 0) {
     return <h2 className="m-5 text-white">The cart is empty!</h2>;

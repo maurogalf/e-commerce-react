@@ -1,20 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Profile = ({ user }) => {
   const [userInfo, setUserInfo] = useState(null);
   const token = localStorage.getItem("token");
 
+  const navigate = useNavigate();
+
   const getUserInfo = async (user) => {
-    const { data } = await axios({
-      method: "GET",
-      url: `https://e-commerce-node-mga.herokuapp.com/api/users/email/${user}`,
-      headers: {
-        authorization: `bearer ${token}`,
-      },
-      body: {},
-    });
-    setUserInfo(data);
+    try {
+      const { data } = await axios({
+        method: "GET",
+        url: `https://e-commerce-node-mga.herokuapp.com/api/users/email/${user}`,
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+        body: {},
+      });
+      setUserInfo(data);
+    } catch (error) {
+      console.log(error.message);
+      if (error.response.status === 401) {
+        localStorage.clear("token");
+        navigate("/login");
+      }
+    }
   };
 
   useEffect(() => {

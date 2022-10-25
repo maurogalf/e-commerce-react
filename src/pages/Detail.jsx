@@ -21,8 +21,12 @@ const Detail = ({ user }) => {
       });
       setProduct(response.data);
     } catch (error) {
-      console.log(error);
       setError(error.message);
+      console.log(error.message);
+      if (error.response.status === 401) {
+        localStorage.clear("token");
+        navigate("/login");
+      }
     }
   };
 
