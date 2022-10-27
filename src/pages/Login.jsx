@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ setUser }) => {
   const [error, setError] = useState(false);
@@ -18,7 +18,6 @@ const Login = ({ setUser }) => {
       const response = await axios({
         method: "post",
         url: "https://e-commerce-node-mga.herokuapp.com/api/login",
-        withCredentials: true,
         headers: {},
         data: {
           username: credentials.username,
