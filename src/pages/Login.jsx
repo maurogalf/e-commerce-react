@@ -18,12 +18,14 @@ const Login = ({ setUser }) => {
       const response = await axios({
         method: "post",
         url: "https://e-commerce-node-mga.herokuapp.com/api/login",
+        withCredentials: true,
         headers: {},
         data: {
           username: credentials.username,
           password: credentials.password,
         },
       });
+      console.log(response);
       setUser(credentials.username);
       setError(false);
       localStorage.setItem("token", response.data.token);
